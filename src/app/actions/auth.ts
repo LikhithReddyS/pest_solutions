@@ -13,16 +13,17 @@ export async function login(
   _prevState: { error: string },
   formData: FormData
 ): Promise<{ error: string }> {
-  const username = formData.get("username") as string;
-  const password = formData.get("password") as string;
+  const username = (formData.get("username") as string)?.trim();
+  const password = (formData.get("password") as string)?.trim();
 
   if (!username || !password) {
     return { error: "Username and password are required." };
   }
 
+  const count = await prisma.user.count();
   const user = await prisma.user.findUnique({ where: { username } });
   if (!user) {
-    return { error: "Invalid username or password." };
+    return { error: `Invalid username or password. (DB has ${count} users)` };
   }
 
   const isValid = await verifyPassword(password, user.password);

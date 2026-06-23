@@ -10,21 +10,18 @@ import Link from "next/link";
 export const dynamic = "force-dynamic";
 
 export default async function DashboardPage() {
-  const [projectCount, serviceCount, revenueAgg, pendingAgg, recentServices] =
-    await Promise.all([
-      prisma.project.count(),
-      prisma.service.count(),
-      prisma.service.aggregate({ _sum: { amount: true } }),
-      prisma.service.aggregate({
-        _sum: { amount: true },
-        where: { paymentStatus: { not: "PAID" } },
-      }),
-      prisma.service.findMany({
-        include: { project: true },
-        orderBy: { date: "desc" },
-        take: 10,
-      }),
-    ]);
+  const projectCount = await prisma.project.count();
+  const serviceCount = await prisma.service.count();
+  const revenueAgg = await prisma.service.aggregate({ _sum: { amount: true } });
+  const pendingAgg = await prisma.service.aggregate({
+    _sum: { amount: true },
+    where: { paymentStatus: { not: "PAID" } },
+  });
+  const recentServices = await prisma.service.findMany({
+    include: { project: true },
+    orderBy: { date: "desc" },
+    take: 10,
+  });
 
   const totalRevenue = revenueAgg._sum.amount || 0;
   const pendingAmount = pendingAgg._sum.amount || 0;

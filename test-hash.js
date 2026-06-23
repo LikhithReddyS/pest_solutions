@@ -1,0 +1,1 @@
+﻿const bcrypt = require('bcryptjs'); const hash = '$2a$12$ccYiBPJ7iW5Q861jyKG0B.87lG5OtLu.ycdaxGm.P9f9199dLPAlO'; Promise.all(['admin', 'password', '123456', 'admin@123'].map(p => bcrypt.compare(p, hash).then(r => r ? p : null))).then(res => console.log(res.filter(Boolean)));

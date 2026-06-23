@@ -20,8 +20,15 @@ export async function login(
     return { error: "Username and password are required." };
   }
 
-  const count = await prisma.user.count();
-  const user = await prisma.user.findUnique({ where: { username } });
+  let user;
+  let count = 0;
+  try {
+    count = await prisma.user.count();
+    user = await prisma.user.findUnique({ where: { username } });
+  } catch (error: any) {
+    return { error: `DB Connection Error: ${error.message || String(error)}` };
+  }
+
   if (!user) {
     return { error: `Invalid username or password. (DB has ${count} users)` };
   }

@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "prisma generate && DATABASE_URL=\"$DIRECT_URL\" prisma db push --accept-data-loss && next build",
+    "build": "prisma generate && node scripts/push-db.mjs && next build",
     "start": "next start",
     "setup": "prisma db push && tsx prisma/seed.ts"
   },

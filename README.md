@@ -91,3 +91,4 @@ Open [http://localhost:3000](http://localhost:3000) and login:
 | `npm run build` | Build for production                     |
 | `npm run start` | Start production server                  |
 | `npm run setup` | Initialize database + seed sample data   |
+"# pest" 
